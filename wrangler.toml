@@ -20,7 +20,7 @@ id = "596faeb30a464717926b559359673763"
 
 # Secret จริงทั้งหมดต่อไปนี้ ห้ามใส่ในไฟล์นี้เด็ดขาด — ตั้งผ่าน `npx wrangler secret put <ชื่อ>` เท่านั้น
 # (เข้ารหัสเก็บฝั่ง Cloudflare) รายชื่อที่ต้องตั้ง ดู SETUP.md:
-#   ADMIN_TOKEN, GEMINI_API_KEY, OPENAI_API_KEY, OPENAI_COMPAT_API_KEY,
+#   ADMIN_TOKEN, CLASS_PASSWORD, MCP_ACCESS_TOKEN, GEMINI_API_KEY, OPENAI_API_KEY, OPENAI_COMPAT_API_KEY,
 #   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN,
 #   TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET
 
@@ -31,5 +31,6 @@ OPENAI_MODEL = "gpt-4o-mini"
 DEFAULT_CHAT_PROVIDER = "gemini"
 # base URL ของ AI gateway แบบ OpenAI-compatible กำหนดเอง (provider "openai-compat") เช่น
 # "Replace base url" — ไม่บังคับ ใช้เฉพาะตอนเลือก provider นี้เท่านั้น
-OPENAI_COMPAT_BASE_URL = "Replace base url"
+# ใส่ base URL จริงเมื่อใช้ provider openai-compat เท่านั้น (ไม่ใส่ placeholder)
+OPENAI_COMPAT_BASE_URL = ""
 OPENAI_COMPAT_MODEL = "gpt-4o-mini"

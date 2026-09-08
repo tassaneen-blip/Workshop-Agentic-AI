@@ -79,6 +79,8 @@ async function callChatApi(userText) {
 
   const res = await fetch('/api/chat', {
     method: 'POST',
+    credentials: 'same-origin',
+    redirect: 'manual',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       message: userText,
@@ -88,6 +90,18 @@ async function callChatApi(userText) {
     }),
   });
 
+  if (res.type === 'opaqueredirect' || (res.status >= 300 && res.status < 400)) {
+    throw new Error('กรุณา login เข้า AI Desk ก่อน แล้วกลับมาลองส่งข้อความอีกครั้ง');
+  }
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    // เมื่อยังไม่ login Cloudflare/worker อาจ redirect fetch ไปหน้า HTML /login
+    // อย่าพยายาม parse HTML เป็น JSON เพราะจะได้ "Unexpected token '<'"
+    if (res.url.includes('/login') || res.redirected) {
+      throw new Error('กรุณา login เข้า AI Desk ก่อน แล้วกลับมาลองส่งข้อความอีกครั้ง');
+    }
+    throw new Error(`ระบบตอบกลับเป็น HTML แทน JSON (HTTP ${res.status}) กรุณาตรวจสอบ URL ของ worker และ deploy ล่าสุด`);
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || `เรียก /api/chat ไม่สำเร็จ (HTTP ${res.status})`);
   return data;
